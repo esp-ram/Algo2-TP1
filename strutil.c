@@ -89,17 +89,24 @@ char *join(char **strv, char sep){
         letras += strlen(strv[count]);
         count++;
     }
-    char* cadena_unida = calloc((letras+count),sizeof(char));
+    char* cadena_unida = malloc(sizeof(char) * (letras+count));
+    //char* cadena_unida = calloc((letras+count),sizeof(char));
     if (cadena_unida == NULL){
         return NULL;
     }
+    letras = 0;
+    cadena_unida[0] = '\0';
     for (int i = 0; i<count;i++){
         size_t cantidad = strlen(strv[i]);
-        strncat(cadena_unida,strv[i],cantidad);
+        strcat(cadena_unida,strv[i]);
         printf("%d\n",i);
+        letras += cantidad;
         if (i != count-1){
-            NULL;
-            //agregar separador
+            //NULL;
+            cadena_unida[letras] = sep;
+            letras++;
+            cadena_unida[letras] = '\0';
+            //strcpy(cadena_unida,sep);
         }
     }
     return cadena_unida;

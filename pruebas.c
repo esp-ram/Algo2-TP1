@@ -6,8 +6,8 @@
 #include <string.h>
 
 void joi(){
-    char** cont = split("abc,def,ghi", ',');
-    char* ret = join(cont,';');
+    char** cont = split(",", ',');
+    char* ret = join(cont,',');
     printf("%s\n",ret);
     free(cont[0]);
     free(cont[1]);
