@@ -23,18 +23,16 @@ char **split(const char *str, char sep){
         }
         i++;
     }
+
     char **strv = malloc(sizeof(char*) * (count+2));
-    if (strv == NULL){
-        return NULL;
-    }
-    i=0;
+    if (strv == NULL)return NULL;
+
     int inicio = 0;
     int fin = 0;
     int posicion = 0;
-    while(str[i] != '\0'){
-        if (str[i] != sep){
+    for(int j = 0; j < strlen(str);j++){
+        if (str[j] != sep){
             fin++;
-            i++;
         }else{
             char* temporal = substr(str+inicio,fin-inicio);
             if (temporal == NULL){
@@ -44,7 +42,6 @@ char **split(const char *str, char sep){
             posicion++;
             inicio = fin+1;
             fin++;
-            i++;
         }
     }
     char* temporal = substr(str+inicio,fin-inicio);
