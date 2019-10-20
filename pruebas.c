@@ -6,13 +6,12 @@
 #include <string.h>
 
 void joi(){
-    char** cont = split(",", ',');
+    char** cont = split("abc,def,ghi", ',');
     char* ret = join(cont,',');
+    printf("\033[0;31m");
     printf("%s\n",ret);
-    free(cont[0]);
-    free(cont[1]);
-    free(cont[2]);
-    free(cont);
+    printf("\033[0m");
+    free_strv(cont);
     free(ret);
 }
 
@@ -20,13 +19,10 @@ void spl(){
     char** cont = split("abc,def,ghi", ',');
     printf("%c\n",*(char*)cont[0]);
     printf("%c\n",*(char*)cont[1]);
-    printf("%ld\n",strlen(cont[2]));
+    //printf("%ld\n",strlen(cont[2]));
     printf("%d\n", cont[3] == NULL);
     //printf("%s\n",cont[3]);
-    free(cont[0]);
-    free(cont[1]);
-    free(cont[2]);
-    free(cont);
+    free_strv(cont);
 }
 
 
@@ -38,9 +34,9 @@ void sub(){
     free(test);
 }
 
-int main(){
-    //sub();
-    //spl();
-    joi();
-    return 0;
-}
+// int main(){
+//     sub();
+//     spl();
+//     joi();
+//     return 0;
+// }

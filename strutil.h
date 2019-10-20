@@ -30,6 +30,7 @@ char **split(const char *str, char sep);
  * esta función. La función devuelve NULL en caso de error.
  */
 char *join(char **strv, char sep);
+char *join1(char **strv, char sep);
 
 /*
  * Libera un arreglo dinámico de cadenas, y todas las cadenas que contiene.

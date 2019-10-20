@@ -3,28 +3,6 @@
 #include <stdio.h>
 
 
-/*
-//malloc tamaño n o maximo de str ?
-char *substr(const char *str, size_t n){
-    char* nuevo_string = malloc(sizeof(char) * n+1);
-    if (nuevo_string == NULL){
-        return NULL;
-    }
-    size_t count = 0;
-    while (count < n){
-        if (count <= strlen(str)){
-            nuevo_string[count] = str[count];
-        }else{
-            nuevo_string[count] = '\0';
-        }
-        count += 1;
-    }
-    return nuevo_string;
-}
-*/
-
-
-
 char* substr(const char* str, size_t n){
     char* nuevo_string = malloc(sizeof(char) * n+1);
     if (nuevo_string == NULL){
@@ -34,8 +12,6 @@ char* substr(const char* str, size_t n){
     nuevo_string[n] = '\0';
     return nuevo_string;
 }
-
-
 
 
 char **split(const char *str, char sep){
@@ -81,33 +57,46 @@ char **split(const char *str, char sep){
 }
 
 
-
 char *join(char **strv, char sep){
+    if(strv[0] == NULL){
+        char* cadena_vacia = calloc(1,sizeof(char));
+        strcpy(cadena_vacia,"");
+        if(!cadena_vacia){
+            return NULL;
+        }
+        return cadena_vacia;
+    }
     int count = 0;
     size_t letras = 0;
     while (strv[count] != NULL){
         letras += strlen(strv[count]);
         count++;
     }
-    char* cadena_unida = malloc(sizeof(char) * (letras+count));
-    //char* cadena_unida = calloc((letras+count),sizeof(char));
+    char* cadena_unida = calloc((letras+count),sizeof(char));
     if (cadena_unida == NULL){
         return NULL;
     }
-    letras = 0;
-    cadena_unida[0] = '\0';
+    char* cadena_devolver = &cadena_unida[0];
     for (int i = 0; i<count;i++){
+        letras = 0;
         size_t cantidad = strlen(strv[i]);
-        strcat(cadena_unida,strv[i]);
-        printf("%d\n",i);
-        letras += cantidad;
-        if (i != count-1){
-            //NULL;
-            cadena_unida[letras] = sep;
-            letras++;
-            cadena_unida[letras] = '\0';
-            //strcpy(cadena_unida,sep);
+        strcpy(cadena_unida,strv[i]);
+        if(i<count-1){
+            *(cadena_unida+cantidad) = sep;
+            letras += 1;
         }
+        letras += cantidad;
+        (cadena_unida+=letras);
     }
-    return cadena_unida;
+    return cadena_devolver;
+}
+
+
+void free_strv(char *strv[]){
+	size_t cantidad = 0;
+	while(strv[cantidad] != NULL){
+		free(strv[cantidad]);
+		cantidad += 1;
+	}
+	free(strv);
 }
