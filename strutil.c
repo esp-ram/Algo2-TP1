@@ -60,34 +60,47 @@ char **split(const char *str, char sep){
 char *join(char **strv, char sep){
     if(strv[0] == NULL){
         char* cadena_vacia = calloc(1,sizeof(char));
-        strcpy(cadena_vacia,"");
         if(!cadena_vacia){
             return NULL;
         }
+        strcpy(cadena_vacia,"");
         return cadena_vacia;
     }
+
+    char tr[1];
+    *tr = sep;
+    int rep = strcmp(tr,"\0");
     int count = 0;
     size_t letras = 0;
+
     while (strv[count] != NULL){
         letras += strlen(strv[count]);
         count++;
     }
+
+    if (rep == 0) letras -= (count-1);
+
     char* cadena_unida = calloc((letras+count),sizeof(char));
     if (cadena_unida == NULL){
         return NULL;
     }
+
     char* cadena_devolver = &cadena_unida[0];
-    for (int i = 0; i<count;i++){
+
+    for(int i = 0; i<count;i++){
         letras = 0;
         size_t cantidad = strlen(strv[i]);
         strcpy(cadena_unida,strv[i]);
-        if(i<count-1){
-            *(cadena_unida+cantidad) = sep;
-            letras += 1;
+        if(rep == 0){
+            if(i<count-1){
+                *(cadena_unida+cantidad) = sep;
+                letras += 1;
+            }
         }
         letras += cantidad;
         (cadena_unida+=letras);
     }
+
     return cadena_devolver;
 }
 
