@@ -14,18 +14,27 @@ char* substr(const char* str, size_t n){
 }
 
 
+char* asignar_str(char* str, int inicio, int final){
+    char* temporal = substr(str+inicio,final-inicio);
+    if (temporal == NULL){
+        return NULL;
+    }
+    return temporal;
+}
+
+
 char **split(const char *str, char sep){
     int count = 0;
-    size_t i = 0;
-    while (str[i] != '\0'){
+    for(int i = 0; str[i] != '\0'; i++){
         if (str[i] == sep){
             count += 1;
         }
-        i++;
     }
 
     char **strv = malloc(sizeof(char*) * (count+2));
-    if (strv == NULL)return NULL;
+    if (strv == NULL){
+        return NULL;
+    }
 
     int inicio = 0;
     int fin = 0;
@@ -34,21 +43,13 @@ char **split(const char *str, char sep){
         if (str[j] != sep){
             fin++;
         }else{
-            char* temporal = substr(str+inicio,fin-inicio);
-            if (temporal == NULL){
-                return NULL;
-            }
-            strv[posicion] = temporal;
+            strv[posicion] = asignar_str(str,inicio,fin);
             posicion++;
-            inicio = fin+1;
             fin++;
+            inicio = fin;
         }
     }
-    char* temporal = substr(str+inicio,fin-inicio);
-    if (temporal == NULL){
-        return NULL;
-    }
-    strv[posicion] = temporal;
+    strv[posicion] = asignar_str(str,inicio,fin);
     strv[posicion+1] = NULL;
     return strv;
 }
@@ -81,23 +82,19 @@ char *join(char **strv, char sep){
     if (cadena_unida == NULL){
         return NULL;
     }
-
     char* cadena_devolver = &cadena_unida[0];
 
     for(int i = 0; i<count;i++){
         letras = 0;
         size_t cantidad = strlen(strv[i]);
         strcpy(cadena_unida,strv[i]);
-        if(rep == 0){
-            if(i<count-1){
-                *(cadena_unida+cantidad) = sep;
-                letras += 1;
-            }
+        if(rep != 0 && i<count-1){
+            *(cadena_unida+cantidad) = sep;
+            letras += 1;
         }
         letras += cantidad;
-        (cadena_unida+=letras);
+        cadena_unida+=letras;
     }
-
     return cadena_devolver;
 }
 
