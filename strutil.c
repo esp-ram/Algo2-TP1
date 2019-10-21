@@ -14,7 +14,7 @@ char* substr(const char* str, size_t n){
 }
 
 
-char* asignar_str(char* str, int inicio, int final){
+char* asignar_str(const char* str, int inicio, int final){
     char* temporal = substr(str+inicio,final-inicio);
     if (temporal == NULL){
         return NULL;
@@ -65,9 +65,9 @@ char *join(char **strv, char sep){
         return cadena_vacia;
     }
 
-    char tr[1];
-    *tr = sep;
-    int rep = strcmp(tr,"\0");
+    char chequeo_separador[1];
+    *chequeo_separador = sep;
+    int separador_nulo = strcmp(chequeo_separador,"\0");
     int count = 0;
     size_t letras = 0;
 
@@ -76,7 +76,7 @@ char *join(char **strv, char sep){
         count++;
     }
 
-    if (rep == 0) letras -= (count-1);
+    if (separador_nulo == 0) letras -= (count-1);
 
     char* cadena_unida = calloc((letras+count),sizeof(char));
     if (cadena_unida == NULL){
@@ -88,7 +88,7 @@ char *join(char **strv, char sep){
         letras = 0;
         size_t cantidad = strlen(strv[i]);
         strcpy(cadena_unida,strv[i]);
-        if(rep != 0 && i<count-1){
+        if(separador_nulo != 0 && i<count-1){
             *(cadena_unida+cantidad) = sep;
             letras += 1;
         }

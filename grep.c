@@ -9,6 +9,8 @@
 #define ANSI_COLOR_LGH_RED	   "\x1b[1m\x1b[31m"
 #define ANSI_COLOR_LGH_GREEN   "\x1b[1m\x1b[32m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+#define LONG_ANSI 23
+
 
 bool isNumber(char number[]){
     int i = 0;
@@ -32,34 +34,32 @@ void desde_entrada(char* palabra, size_t n){
 void desde_archivo(char* palabra, size_t n ,char* archivo){
     char *line_buf = NULL;
     size_t line_buf_size = 0;
-    int line_count = 0;
     ssize_t line_size;
     char *ret;
     FILE *fp = fopen(archivo, "r");
     line_size = getline(&line_buf, &line_buf_size, fp);
     while (line_size >= 0){
-        line_count++;
         //printf("line[%06d]: chars=%06zd, buf size=%06zu, contenido: %s", line_count,line_size, line_buf_size, line_buf);
         char** contenido = split(line_buf, ' ');
         for(size_t i = 0; contenido[i] != NULL; i++){
             if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra)){
-                //printf("match %ld\n",i);
                 ret = strstr(contenido[i], palabra);
                 if(ret != NULL){
-                    char* modif_str = calloc(50,sizeof(char));
-                    //printf("found\n");
-                    //printf("%s\n",ret);
+                    char* modif_str = calloc(LONG_ANSI + strlen(palabra),sizeof(char));
                     strcat(modif_str,substr(contenido[i],strlen(contenido[i])-strlen(ret)));
                     strcat(modif_str,ANSI_COLOR_LGH_RED);
                     strcat(modif_str,substr(ret,strlen(palabra)));
                     strcat(modif_str,ANSI_COLOR_RESET);
                     strcat(modif_str,(ret+strlen(palabra)));
+                    free(contenido[i]);
                     contenido[i]=modif_str;
                 }
             }
         }
         char* resultado = join(contenido,' ');
-        printf("%s\n", resultado);
+        free_strv(contenido);
+        fprintf(stdout,"%s\n", resultado);
+        free(resultado);
         line_size = getline(&line_buf, &line_buf_size, fp);
     }
     free(line_buf);
