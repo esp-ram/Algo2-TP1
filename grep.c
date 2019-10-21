@@ -39,7 +39,7 @@ void desde_archivo(char* palabra, size_t n ,char* archivo){
     FILE *fp = fopen(archivo, "r");
     line_size = getline(&line_buf, &line_buf_size, fp);
     while (line_size >= 0){
-        //printf("line[%06d]: chars=%06zd, buf size=%06zu, contenido: %s", line_count,line_size, line_buf_size, line_buf);
+        //printf("line: chars=%06zd, buf size=%06zu, contenido: %s", line_size, line_buf_size, line_buf);
         char** contenido = split(line_buf, ' ');
         for(size_t i = 0; contenido[i] != NULL; i++){
             if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra)){
@@ -69,6 +69,42 @@ void desde_archivo(char* palabra, size_t n ,char* archivo){
 
 
 
+void desde_archivo_1(char* palabra, size_t n ,char* archivo){
+    char *line_buf = NULL;
+    size_t line_buf_size = 0;
+    ssize_t line_size;
+    char *ret;
+    FILE *fp = fopen(archivo, "r");
+    line_size = getline(&line_buf, &line_buf_size, fp);
+
+    while (line_size >= 0){
+        char** contenido = split(line_buf, ' ');
+
+        for(size_t i = 0; contenido[i] != NULL; i++){
+
+            if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra)){
+                ret = strstr(contenido[i], palabra);
+
+                if(ret != NULL){
+                    char* resultado = join(contenido,' ');
+                    free_strv(contenido);
+                    fprintf(stdout,"%s\n", resultado);
+                    free(resultado);
+                    break;
+                }
+            }
+        }
+        free(ret);
+        line_size = getline(&line_buf, &line_buf_size, fp);
+    }
+
+    free(line_buf);
+    line_buf = NULL;
+    fclose(fp);
+}
+
+
+
 int main(int argc, char* argv[]){
     if (argc < 3) {
         fprintf(stderr, "%s\n","Cantidad erronea de parametros");
@@ -91,7 +127,7 @@ int main(int argc, char* argv[]){
             fprintf(stderr, "%s\n","No se pudo leer el archivo indicado");
             return 0;
         }
-        desde_archivo(argv[1],(size_t)argv[2],argv[3]);
+        desde_archivo_1(argv[1],(size_t)argv[2],argv[3]);
         return 0;
     }else{
         fprintf(stderr, "%s\n","Cantidad erronea de parametros");
