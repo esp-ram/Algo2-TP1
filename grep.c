@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "strutil.h"
+#include "lista.h"
 #include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -21,7 +22,8 @@ bool isNumber(char number[]){
     return true;
 }
 
-
+// TODO: agregar limite de salida de lineas.
+// TODO: agregar comprobacion.
 void desde_entrada(char* palabra, size_t n){
     char* linea = NULL;
     size_t capacidad = 0;
@@ -69,31 +71,58 @@ void desde_archivo(char* palabra, size_t n ,char* archivo){
 */
 
 
-void comprobacion(char* linea_leida, char* buscada){
+bool comprobacion(char* linea_leida, char* buscada){
     char** contenido = split(linea_leida, ' ');
     for(size_t i = 0; contenido[i] != NULL; i++){
         if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(buscada) && strstr(contenido[i], buscada) != NULL){
-            fprintf(stdout,"%s\n", linea_leida);
-            break;
+            free_strv(contenido);
+            return true;
         }
     }
     free_strv(contenido);
+    return false;
 }
 
-
-void desde_archivo_1(char* palabra, size_t n ,char* archivo){
+// REVIEW: Modularizacion.
+void desde_archivo_1(char* palabra, size_t n, char* archivo){
+    lista_t* lista_lineas;
+    if(n != 0){
+        lista_lineas = lista_crear();
+    }
     char *line_buf = NULL;
     size_t line_buf_size = 0;
     ssize_t line_size;
     FILE *fp = fopen(archivo, "r");
     line_size = getline(&line_buf, &line_buf_size, fp);
-    while (line_size >= 0){
-        comprobacion(line_buf, palabra);
+    while(line_size >= 0){
+        if(n != 0){
+            char* add_line;
+            add_line = malloc(sizeof(char) * strlen(line_buf)+1);
+            strcpy(add_line,line_buf);
+            lista_insertar_ultimo(lista_lineas,add_line);
+            if(lista_largo(lista_lineas) > (size_t)(n+1)){
+                free(lista_borrar_primero(lista_lineas));
+            }
+            if(comprobacion(line_buf, palabra)){
+                while(!lista_esta_vacia(lista_lineas)){
+                    void* linea_print = lista_borrar_primero(lista_lineas);
+                    fprintf(stdout, "%s\n", (char*)linea_print);
+                    free(linea_print);
+                }
+            }
+        }else{
+            if(comprobacion(line_buf, palabra)){
+                fprintf(stdout, "%s\n", line_buf);
+            }
+        }
         line_size = getline(&line_buf, &line_buf_size, fp);
     }
     free(line_buf);
     line_buf = NULL;
     fclose(fp);
+    if(n != 0){
+        lista_destruir(lista_lineas,free);
+    }
 }
 
 
@@ -112,6 +141,7 @@ int main(int argc, char* argv[]){
         return 0;
     }else if (argc == 4){
         printf("caso == 4\n");
+        printf("%d\n",atoi(argv[2]));
         if(!isNumber(argv[2])){
             fprintf(stderr,"%s\n","no es un numero");
             return 0;
@@ -120,7 +150,7 @@ int main(int argc, char* argv[]){
             fprintf(stderr, "%s\n","No se pudo leer el archivo indicado");
             return 0;
         }
-        desde_archivo_1(argv[1],(size_t)argv[2],argv[3]);
+        desde_archivo_1(argv[1],atoi(argv[2]),argv[3]);
         return 0;
     }else{
         fprintf(stderr, "%s\n","Cantidad erronea de parametros");
