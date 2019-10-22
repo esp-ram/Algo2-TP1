@@ -73,31 +73,19 @@ void desde_archivo_1(char* palabra, size_t n ,char* archivo){
     char *line_buf = NULL;
     size_t line_buf_size = 0;
     ssize_t line_size;
-    char *ret;
     FILE *fp = fopen(archivo, "r");
     line_size = getline(&line_buf, &line_buf_size, fp);
-
     while (line_size >= 0){
         char** contenido = split(line_buf, ' ');
-
         for(size_t i = 0; contenido[i] != NULL; i++){
-
-            if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra)){
-                ret = strstr(contenido[i], palabra);
-
-                if(ret != NULL){
-                    char* resultado = join(contenido,' ');
-                    free_strv(contenido);
-                    fprintf(stdout,"%s\n", resultado);
-                    free(resultado);
-                    break;
-                }
+            if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra) && strstr(contenido[i], palabra) != NULL){
+                fprintf(stdout,"%s\n", line_buf);
+                break;
             }
         }
-        free(ret);
+        free_strv(contenido);
         line_size = getline(&line_buf, &line_buf_size, fp);
     }
-
     free(line_buf);
     line_buf = NULL;
     fclose(fp);
