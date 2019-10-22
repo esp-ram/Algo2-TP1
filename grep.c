@@ -30,7 +30,7 @@ void desde_entrada(char* palabra, size_t n){
     free(linea);
 }
 
-
+/*
 void desde_archivo(char* palabra, size_t n ,char* archivo){
     char *line_buf = NULL;
     size_t line_buf_size = 0;
@@ -66,7 +66,19 @@ void desde_archivo(char* palabra, size_t n ,char* archivo){
     line_buf = NULL;
     fclose(fp);
 }
+*/
 
+
+void comprobacion(char* linea_leida, char* buscada){
+    char** contenido = split(linea_leida, ' ');
+    for(size_t i = 0; contenido[i] != NULL; i++){
+        if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(buscada) && strstr(contenido[i], buscada) != NULL){
+            fprintf(stdout,"%s\n", linea_leida);
+            break;
+        }
+    }
+    free_strv(contenido);
+}
 
 
 void desde_archivo_1(char* palabra, size_t n ,char* archivo){
@@ -76,14 +88,7 @@ void desde_archivo_1(char* palabra, size_t n ,char* archivo){
     FILE *fp = fopen(archivo, "r");
     line_size = getline(&line_buf, &line_buf_size, fp);
     while (line_size >= 0){
-        char** contenido = split(line_buf, ' ');
-        for(size_t i = 0; contenido[i] != NULL; i++){
-            if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(palabra) && strstr(contenido[i], palabra) != NULL){
-                fprintf(stdout,"%s\n", line_buf);
-                break;
-            }
-        }
-        free_strv(contenido);
+        comprobacion(line_buf, palabra);
         line_size = getline(&line_buf, &line_buf_size, fp);
     }
     free(line_buf);
