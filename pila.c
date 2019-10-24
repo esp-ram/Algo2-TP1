@@ -47,6 +47,10 @@ bool redimensionar(pila_t* pila, size_t nuevo_tam){
     return true;
 }
 
+size_t pila_cantidad(pila_t* pila){
+    return(pila->cantidad);
+}
+
 
 bool pila_esta_vacia(const pila_t *pila){
     return(pila->cantidad == 0);
@@ -89,9 +93,4 @@ void* pila_desapilar(pila_t *pila){
         redimensionar(pila,pila->capacidad / FACTOR_REDIMENSION);
     }
     return (dato_desapilado);
-}
-
-
-size_t pila_cantidad(pila_t* pila){
-    return(pila->cantidad);
 }

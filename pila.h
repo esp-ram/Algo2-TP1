@@ -2,6 +2,7 @@
 #define _PILA_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 /* *****************************************************************
@@ -51,6 +52,10 @@ void* pila_ver_tope(const pila_t *pila);
 // Post: si la pila no estaba vacía, se devuelve el valor del tope anterior
 // y la pila contiene un elemento menos.
 void* pila_desapilar(pila_t *pila);
+
+//
+//
+size_t pila_cantidad(pila_t* pila);
 
 
 /* *****************************************************************
