@@ -145,10 +145,10 @@ int raiz(pila_t* pila, int* arreglo,size_t j){
 
 
 int calculo_logartimo(int a, int b){
-    if (a < b-1){
-        return 0;
+    if (a > (b-1)){
+        return 1+calculo_logartimo(a/b,b);
     }
-    return 1+calculo_logartimo(a/b,b);
+    return 0;
 }
 
 
@@ -212,10 +212,12 @@ void ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
         logaritmo(pila,arreglo,j);
         // printf("log\n");
     }else{
-        printf("no es un operador\n");
+        fprintf(stderr,"ERROR ELEMENTO INCORRECTO\n");
     }
 }
 
+// TODO: coninuacion de lectura por stdin
+// TODO: control de devolucion de resultado cuando hay error
 
 int calculadora(void){
     pila_t* pila = pila_crear();
@@ -245,6 +247,8 @@ int calculadora(void){
     pila_destruir(pila);
     free(guarda_numeros);
     free_strv(entrada);
+    free(line_buffer);
+    free_strv(operators);
     return 0;
 }
 
