@@ -90,3 +90,8 @@ void* pila_desapilar(pila_t *pila){
     }
     return (dato_desapilado);
 }
+
+
+size_t pila_cantidad(pila_t* pila){
+    return(pila->cantidad);
+}
