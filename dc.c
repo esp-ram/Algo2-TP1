@@ -1,4 +1,4 @@
-#define _XOPEN_SOURCE 1000 // or any bigger number
+n1#define _XOPEN_SOURCE 1000 // or any bigger number
 #include <stdio.h>
 #include <stdlib.h>
 #include "strutil.h"
@@ -29,21 +29,23 @@ bool isOperator_1(char* posible, char** operadores){
 }
 
 
-int suma (pila_t* pila, int* arreglo,size_t j){
+int suma (pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
     }
-    int a ,b;
-    a = *(int*)pila_desapilar(pila);
-    b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a + b;
-    pila_apilar(pila,&arreglo[j+1]);
+    int n1, n2, cuenta;
+    n1 = atoi(*(char*)pila_desapilar(pila));
+    n2 = atoi(*(char*)pila_desapilar(pila));
+    cuenta = n1 + n2;
+    char* resultado = calloc(strlen(str(c))+1,sizeof(char));
+    sprintf(resultado,"%d",cuenta);
+    pila_apilar(pila,&resultado);
     return 0;
 }
 
 
-int resta (pila_t* pila, int* arreglo,size_t j){
+int resta (pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -57,7 +59,7 @@ int resta (pila_t* pila, int* arreglo,size_t j){
 }
 
 
-int multiplicacion (pila_t* pila, int* arreglo,size_t j){
+int multiplicacion (pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -71,7 +73,7 @@ int multiplicacion (pila_t* pila, int* arreglo,size_t j){
 }
 
 
-int division(pila_t* pila, int* arreglo,size_t j){
+int division(pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -100,7 +102,7 @@ int calculo_potencia(int a, int b){
 }
 
 
-int potencia(pila_t* pila, int* arreglo,size_t j){
+int potencia(pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -130,7 +132,7 @@ int calculo_raiz(int a, int min, int max){
 }
 
 
-int raiz(pila_t* pila, int* arreglo,size_t j){
+int raiz(pila_t* pila){
     if(pila_cantidad(pila) < 1){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -152,7 +154,7 @@ int calculo_logartimo(int a, int b){
 }
 
 
-int logaritmo(pila_t* pila, int* arreglo,size_t j){
+int logaritmo(pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -167,7 +169,7 @@ int logaritmo(pila_t* pila, int* arreglo,size_t j){
 }
 
 
-int ternario(pila_t* pila, int* arreglo, size_t j){
+int ternario(pila_t* pila){
     if(pila_cantidad(pila) < 3){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -186,30 +188,30 @@ int ternario(pila_t* pila, int* arreglo, size_t j){
 }
 
 
-void ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
+void ops (pila_t* pila, char* signo, char** operadores){
     if(strstr(signo,operadores[0]) != NULL){
-        suma(pila,arreglo,j);
+        suma(pila);
         // printf("suma\n");
     }else if(strstr(signo,operadores[1]) != NULL){
-        resta(pila,arreglo,j);
+        resta(pila);
         // printf("resta\n");
     }else if(strstr(signo,operadores[2]) != NULL){
-        multiplicacion(pila,arreglo,j);
+        multiplicacion(pila);
         // printf("multipl\n");
     }else if(strstr(signo,operadores[3]) != NULL){
-        division(pila,arreglo,j);
+        division(pila);
         // printf("div\n");
     }else if(strstr(signo,operadores[4]) != NULL){
-        raiz(pila,arreglo,j);
+        raiz(pila);
         // printf("raiz\n");
     }else if(strstr(signo,operadores[5]) != NULL){
-        potencia(pila,arreglo,j);
+        potencia(pila);
         // printf("pot\n");
     }else if(strstr(signo,operadores[6]) != NULL){
-        ternario(pila,arreglo,j);
+        ternario(pila);
         // printf("ternario\n");
     }else if(strstr(signo,operadores[7]) != NULL){
-        logaritmo(pila,arreglo,j);
+        logaritmo(pila);
         // printf("log\n");
     }else{
         fprintf(stderr,"ERROR ELEMENTO INCORRECTO\n");
@@ -228,19 +230,14 @@ int calculadora(void){
     char *line_buffer = NULL;
     size_t line_buffer_size = 0;
     getline(&line_buffer, &line_buffer_size, stdin);
-    // TODO: comprobacion memoria calloc.
-    int* guarda_numeros = calloc(line_buffer_size,sizeof(int));
     char** entrada = split(line_buffer,' ');
-    int j = 0;
     for(int i = 0; entrada[i] != NULL; i++){
         if(isNumber(entrada[i])){
-            guarda_numeros[j] = atoi(entrada[i]);
-            pila_apilar(pila,&guarda_numeros[j]);
+            pila_apilar(pila,&entrada[i]);
             printf("apila numero\n");
-            j++;
         }else{
             printf("no es numero\n");
-            ops(pila,entrada[i],operators,guarda_numeros,j);
+            ops(pila,entrada[i],operators);
         }
     }
     printf("%d\n",*(int*)pila_desapilar(pila));
