@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
+#define TAM_INICIAL 20
 
 
 bool isNumber(char number[]){
@@ -39,7 +40,7 @@ int countDigit(long long n){
 }
 
 
-int suma (pila_t* pila){
+int suma (pila_t* pila, char** arreglo, size_t j){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
@@ -51,8 +52,10 @@ int suma (pila_t* pila){
     printf("%d\n",n1);
     printf("%d\n",n2);
     printf("%d\n",cuenta);
-    char* resultado = calloc(countDigit(cuenta)+2,sizeof(char));
+    char* resultado = calloc(countDigit(cuenta)+1,sizeof(char));
     sprintf(resultado,"%d",cuenta);
+    arreglo[j] = resultado;
+    printf("%s\n",resultado);
     pila_apilar(pila,&resultado);
     return 0;
 }
@@ -209,9 +212,9 @@ int ternario(pila_t* pila){
 }
 */
 
-void ops (pila_t* pila, char* signo, char** operadores){
+void ops (pila_t* pila, char* signo, char** operadores, char** arreglo, size_t j){
     if(strstr(signo,operadores[0]) != NULL){
-        suma(pila);
+        suma(pila,arreglo,j);
         // printf("suma\n");
         /*
     }else if(strstr(signo,operadores[1]) != NULL){
@@ -254,16 +257,20 @@ int calculadora(void){
     size_t line_buffer_size = 0;
     getline(&line_buffer, &line_buffer_size, stdin);
     char** entrada = split(line_buffer,' ');
+    char** guarda_resultados = calloc(TAM_INICIAL,sizeof(char*));
+    size_t j = 0;
     for(int i = 0; entrada[i] != NULL; i++){
         if(isNumber(entrada[i])){
             pila_apilar(pila,entrada[i]);
             printf("apila numero\n");
         }else{
             printf("no es numero\n");
-            ops(pila,entrada[i],operators);
+            ops(pila,entrada[i],operators,guarda_resultados,j);
         }
     }
-    printf("%d\n",atoi((char*)pila_desapilar(pila)));
+    printf("%d\n",*(char*)pila_desapilar(pila));
+    free(guarda_resultados[0]);
+    free(guarda_resultados);
     pila_destruir(pila);
     free_strv(entrada);
     free(line_buffer);
