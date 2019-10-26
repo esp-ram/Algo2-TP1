@@ -1,4 +1,4 @@
-n1#define _XOPEN_SOURCE 1000 // or any bigger number
+#define _XOPEN_SOURCE 1000 // or any bigger number
 #include <stdio.h>
 #include <stdlib.h>
 #include "strutil.h"
@@ -29,32 +29,48 @@ bool isOperator_1(char* posible, char** operadores){
 }
 
 
+int countDigit(long long n){
+    int count = 0;
+    while (n != 0) {
+        n = n / 10;
+        ++count;
+    }
+    return count;
+}
+
+
 int suma (pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
     }
     int n1, n2, cuenta;
-    n1 = atoi(*(char*)pila_desapilar(pila));
-    n2 = atoi(*(char*)pila_desapilar(pila));
+    n1 = atoi((char*)pila_desapilar(pila));
+    n2 = atoi((char*)pila_desapilar(pila));
     cuenta = n1 + n2;
-    char* resultado = calloc(strlen(str(c))+1,sizeof(char));
+    printf("%d\n",n1);
+    printf("%d\n",n2);
+    printf("%d\n",cuenta);
+    char* resultado = calloc(countDigit(cuenta)+2,sizeof(char));
     sprintf(resultado,"%d",cuenta);
     pila_apilar(pila,&resultado);
     return 0;
 }
 
+/*
 
 int resta (pila_t* pila){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
     }
-    int a ,b;
-    a = *(int*)pila_desapilar(pila);
-    b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a - b;
-    pila_apilar(pila,&arreglo[j+1]);
+    int n1, n2, cuenta;
+    n1 = atoi((char*)pila_desapilar(pila));
+    n2 = atoi((char*)pila_desapilar(pila));
+    cuenta = n1 - n2;
+    char* resultado = calloc(strlen(str(cuenta))+1,sizeof(char));
+    sprintf(resultado,"%d",cuenta);
+    pila_apilar(pila,&resultado);
     return 0;
 }
 
@@ -64,11 +80,13 @@ int multiplicacion (pila_t* pila){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
     }
-    int a ,b;
-    a = *(int*)pila_desapilar(pila);
-    b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a * b;
-    pila_apilar(pila,&arreglo[j+1]);
+    int n1, n2, cuenta;
+    n1 = atoi(*(char*)pila_desapilar(pila));
+    n2 = atoi(*(char*)pila_desapilar(pila));
+    cuenta = n1 * n2;
+    char* resultado = calloc(strlen(str(cuenta))+1,sizeof(char));
+    sprintf(resultado,"%d",cuenta);
+    pila_apilar(pila,&resultado);
     return 0;
 }
 
@@ -80,10 +98,13 @@ int division(pila_t* pila){
     }
     int a ,b;
     // REVIEW: caso b = 0 se apila a?
-    a = *(int*)pila_desapilar(pila);
-    b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a / b;
-    pila_apilar(pila,&arreglo[j+1]);
+    int n1, n2, cuenta;
+    n1 = atoi(*(char*)pila_desapilar(pila));
+    n2 = atoi(*(char*)pila_desapilar(pila));
+    cuenta = n1 / n2;
+    char* resultado = calloc(strlen(str(cuenta))+1,sizeof(char));
+    sprintf(resultado,"%d",cuenta);
+    pila_apilar(pila,&resultado);
     return 0;
 }
 
@@ -186,12 +207,13 @@ int ternario(pila_t* pila){
     pila_apilar(pila,&arreglo[j+1]);
     return 0;
 }
-
+*/
 
 void ops (pila_t* pila, char* signo, char** operadores){
     if(strstr(signo,operadores[0]) != NULL){
         suma(pila);
         // printf("suma\n");
+        /*
     }else if(strstr(signo,operadores[1]) != NULL){
         resta(pila);
         // printf("resta\n");
@@ -213,6 +235,7 @@ void ops (pila_t* pila, char* signo, char** operadores){
     }else if(strstr(signo,operadores[7]) != NULL){
         logaritmo(pila);
         // printf("log\n");
+        */
     }else{
         fprintf(stderr,"ERROR ELEMENTO INCORRECTO\n");
     }
@@ -233,16 +256,15 @@ int calculadora(void){
     char** entrada = split(line_buffer,' ');
     for(int i = 0; entrada[i] != NULL; i++){
         if(isNumber(entrada[i])){
-            pila_apilar(pila,&entrada[i]);
+            pila_apilar(pila,entrada[i]);
             printf("apila numero\n");
         }else{
             printf("no es numero\n");
             ops(pila,entrada[i],operators);
         }
     }
-    printf("%d\n",*(int*)pila_desapilar(pila));
+    printf("%d\n",atoi((char*)pila_desapilar(pila)));
     pila_destruir(pila);
-    free(guarda_numeros);
     free_strv(entrada);
     free(line_buffer);
     free_strv(operators);
