@@ -115,7 +115,6 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
 }
 
 
-// REVIEW: usar switch?
 /*
 int main(int argc, char* argv[]){
     if (argc < 3) {

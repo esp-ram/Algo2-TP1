@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "strutil.h"
 
 
 char* substr(const char* str, size_t n){
@@ -44,12 +45,20 @@ char **split(const char *str, char sep){
             fin++;
         }else{
             strv[posicion] = asignar_str(str,inicio,fin);
+            if(strv[posicion] == NULL){
+                free_strv(strv);
+                return NULL;
+            }
             posicion++;
             fin++;
             inicio = fin;
         }
     }
     strv[posicion] = asignar_str(str,inicio,fin);
+    if(strv[posicion] == NULL){
+        free_strv(strv);
+        return NULL;
+    }
     strv[posicion+1] = NULL;
     return strv;
 }
@@ -68,12 +77,12 @@ char *join(char **strv, char sep){
     char chequeo_separador[1];
     *chequeo_separador = sep;
     int separador_nulo = strcmp(chequeo_separador,"\0");
-    int count = 0;
+
+    int count;
     size_t letras = 0;
 
-    while (strv[count] != NULL){
+    for(count = 0; strv[count] != NULL; count++){
         letras += strlen(strv[count]);
-        count++;
     }
 
     if (separador_nulo == 0) letras -= (count-1);
@@ -84,16 +93,14 @@ char *join(char **strv, char sep){
     }
     char* cadena_devolver = &cadena_unida[0];
 
-    for(int i = 0; i<count;i++){
-        letras = 0;
-        size_t cantidad = strlen(strv[i]);
-        strcpy(cadena_unida,strv[i]);
+    size_t lugar = 0;
+    for(int i = 0; strv[i]!= NULL;i++){
+        strcpy(&cadena_unida[lugar],strv[i]);
+        lugar += strlen(strv[i]);
         if(separador_nulo != 0 && i<count-1){
-            *(cadena_unida+cantidad) = sep;
-            letras += 1;
+            cadena_unida[lugar] = sep;
+            lugar++;
         }
-        letras += cantidad;
-        cadena_unida+=letras;
     }
     return cadena_devolver;
 }

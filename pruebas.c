@@ -34,9 +34,9 @@ void sub(){
     free(test);
 }
 
-// int main(){
-//     sub();
-//     spl();
-//     joi();
-//     return 0;
-// }
+int main(){
+    sub();
+    spl();
+    joi();
+    return 0;
+}
