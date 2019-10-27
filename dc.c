@@ -7,6 +7,17 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
+#define FACTOR_REDIMENSION 2
+
+
+bool redimensionar_arr(int* vector, size_t tam_nuevo) {
+    int* datos_nuevo = realloc(vector, (tam_nuevo*FACTOR_REDIMENSION) * sizeof(int));
+    if (tam_nuevo > 0 && datos_nuevo == NULL) {
+        return false;
+    }
+    vector = datos_nuevo;
+    return true;
+}
 
 
 bool isNumber(char number[]){
@@ -19,16 +30,6 @@ bool isNumber(char number[]){
 }
 
 
-bool isOperator_1(char* posible, char** operadores){
-    for(int i = 0;i<8;i++){
-        if(strcmp(posible,operadores[i]) == 0){
-            return true;
-        }
-    }
-    return false;
-}
-
-
 int suma (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
@@ -37,8 +38,8 @@ int suma (pila_t* pila, int* arreglo,size_t j){
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a + b;
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = a + b;
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -51,8 +52,8 @@ int resta (pila_t* pila, int* arreglo,size_t j){
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a - b;
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = a - b;
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -65,8 +66,8 @@ int multiplicacion (pila_t* pila, int* arreglo,size_t j){
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    arreglo[j+1] = a * b;
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = a * b;
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -82,8 +83,8 @@ int division(pila_t* pila, int* arreglo,size_t j){
     if(b == 0){
         return -1;
     }
-    arreglo[j+1] = a / b;
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = a / b;
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -91,9 +92,9 @@ int division(pila_t* pila, int* arreglo,size_t j){
 int calculo_potencia(int a, int b){
     if(b == 0){
         return 1;
-    }else if (b == 1){
+    }else if (b <= 1){
         return a;
-    }else if ((a % 2) == 0){
+    }else if ((b % 2) == 0){
         return calculo_potencia(a*a, b/2);
     }else{
         return a * calculo_potencia(a*a, (b-1)/2);
@@ -113,8 +114,8 @@ int potencia(pila_t* pila, int* arreglo,size_t j){
     if(b < 0){
         return -1;
     }
-    arreglo[j+1] = calculo_potencia(a,b);
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = calculo_potencia(a,b);
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -141,11 +142,11 @@ int raiz(pila_t* pila, int* arreglo,size_t j){
     }
     int a;
     a = *(int*)pila_desapilar(pila);
-    if(a <= 0){
+    if(a < 0){
         return -1;
     }
-    arreglo[j+1] = calculo_raiz(a,1,a/2);
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = calculo_raiz(a,0,a);
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -163,15 +164,14 @@ int logaritmo(pila_t* pila, int* arreglo,size_t j){
         fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
         return -1;
     }
-    // REVIEW: agregar comprobacion b > 1.
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    if(b <= 0){
+    if(b <= 1){
         return -1;
     }
-    arreglo[j+1] = calculo_logartimo(a,b);
-    pila_apilar(pila,&arreglo[j+1]);
+    arreglo[j] = calculo_logartimo(a,b);
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -186,11 +186,11 @@ int ternario(pila_t* pila, int* arreglo, size_t j){
     b = *(int*)pila_desapilar(pila);
     c = *(int*)pila_desapilar(pila);
     if (a == 0){
-        arreglo[j+1] = c;
+        arreglo[j] = c;
     }else{
-        arreglo[j+1] = b;
+        arreglo[j] = b;
     }
-    pila_apilar(pila,&arreglo[j+1]);
+    pila_apilar(pila,&arreglo[j]);
     return 0;
 }
 
@@ -201,98 +201,107 @@ bool ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
             return false;
         }
         return true;
-        // printf("suma\n");
     }else if(strstr(signo,operadores[1]) != NULL){
         if (resta(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("resta\n");
     }else if(strstr(signo,operadores[2]) != NULL){
         if(multiplicacion(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("multipl\n");
     }else if(strstr(signo,operadores[3]) != NULL){
         if(division(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("div\n");
     }else if(strstr(signo,operadores[4]) != NULL){
         if (raiz(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("raiz\n");
     }else if(strstr(signo,operadores[5]) != NULL){
         if (potencia(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("pot\n");
     }else if(strstr(signo,operadores[6]) != NULL){
         if (ternario(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("ternario\n");
     }else if(strstr(signo,operadores[7]) != NULL){
         if (logaritmo(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-        // printf("log\n");
     }else{
         return false;
     }
 }
 
+
 bool calculadora_l(char** operadores, char* linea, size_t long_linea){
     pila_t* pila = pila_crear();
     if(pila == NULL){
-        return 0;
+        return false;
     }
-    // TODO: comprobacion memoria calloc.
+
     int* guarda_numeros = calloc(long_linea,sizeof(int));
-    char** entrada = split(linea,' ');
+    if (guarda_numeros == NULL){
+        pila_destruir(pila);
+        return false;
+    }
+
+    size_t tam = long_linea;
     int j = 0;
-    bool error = false;
+    char** entrada = split(linea,' ');
+    bool error_stop = false;
     for(int i = 0; entrada[i] != NULL; i++){
         if(isNumber(entrada[i])){
             guarda_numeros[j] = atoi(entrada[i]);
             pila_apilar(pila,&guarda_numeros[j]);
-            //printf("apila numero\n");
             j++;
         }else{
-            //printf("no es numero\n");
-            if (ops(pila,entrada[i],operadores,guarda_numeros,j) == false){
-                error = true;
+            if(ops(pila,entrada[i],operadores,guarda_numeros,j) == false){
+                error_stop = true;
                 break;
             }
+            j++;
+        }
+        if(j == tam){
+            if(redimensionar_arr(guarda_numeros,tam) == false){
+                error_stop = true;
+                break;
+            }
+            tam = tam*FACTOR_REDIMENSION;
         }
     }
-    if(!error){
+    if(pila_cantidad(pila) != 1){
+        error_stop = true;
+    }
+    if(!error_stop){
         printf("%d\n",*(int*)pila_desapilar(pila));
     }
     pila_destruir(pila);
     free(guarda_numeros);
     free_strv(entrada);
+    return error_stop;
 }
 
 
-
-// TODO: coninuacion de lectura por stdin
-// TODO: control de devolucion de resultado cuando hay error
 int calculadora_entrada(void){
     char** operators = split("+ - * / sqrt ^ ? log",' ');
     char *line_buffer = NULL;
     size_t line_buffer_size = 0;
-    getline(&line_buffer, &line_buffer_size, stdin);
+    ssize_t line_size;
+    line_size = getline(&line_buffer, &line_buffer_size, stdin);
     while(line_size > 1){
-        calculadora_l(operators,line_buffer,line_buffer_size);
-        getline(&line_buffer, &line_buffer_size, stdin);
+        if (calculadora_l(operators,line_buffer,line_buffer_size) == true){
+            fprintf(stderr, "ERROR\n");
+        }
+        line_size = getline(&line_buffer, &line_buffer_size, stdin);
     }
     free(line_buffer);
     free_strv(operators);
@@ -301,6 +310,6 @@ int calculadora_entrada(void){
 
 
 int main(void){
-    calculadora();
+    calculadora_entrada();
     return 0;
 }
