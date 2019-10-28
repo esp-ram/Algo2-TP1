@@ -122,7 +122,7 @@ int main(int argc, char* argv[]){
         return 0;
     } else if (argc == 3) {
         printf("caso == 3\n");
-        if(!isNumber(argv[2]) || argv[2] < 0){
+        if(!isNumber(argv[2]) || atoi(argv[2]) < 0){
             fprintf(stderr,"%s\n","no es un numero");
             return 0;
         }

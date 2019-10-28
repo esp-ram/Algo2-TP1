@@ -32,7 +32,7 @@ bool isNumber(char number[]){
 
 int suma (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -46,7 +46,7 @@ int suma (pila_t* pila, int* arreglo,size_t j){
 
 int resta (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -60,7 +60,7 @@ int resta (pila_t* pila, int* arreglo,size_t j){
 
 int multiplicacion (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -74,7 +74,7 @@ int multiplicacion (pila_t* pila, int* arreglo,size_t j){
 
 int division(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -105,7 +105,7 @@ int calculo_potencia(int a, int b){
 
 int potencia(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -137,7 +137,7 @@ int calculo_raiz(int a, int min, int max){
 
 int raiz(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 1){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a;
@@ -161,7 +161,7 @@ int calculo_logartimo(int a, int b){
 
 int logaritmo(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -178,7 +178,7 @@ int logaritmo(pila_t* pila, int* arreglo,size_t j){
 
 int ternario(pila_t* pila, int* arreglo, size_t j){
     if(pila_cantidad(pila) < 3){
-        fprintf(stderr, "ERROR FALTAN ELEMENTOS\n");
+        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b, c;
@@ -299,7 +299,7 @@ int calculadora_entrada(void){
     line_size = getline(&line_buffer, &line_buffer_size, stdin);
     while(line_size > 1){
         if (calculadora_l(operators,line_buffer,line_buffer_size) == true){
-            fprintf(stderr, "ERROR\n");
+            fprintf(stdout, "ERROR\n");
         }
         line_size = getline(&line_buffer, &line_buffer_size, stdin);
     }
