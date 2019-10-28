@@ -8,7 +8,7 @@
 #include <ctype.h>
 #include <string.h>
 
-/*
+
 bool isNumber(char number[]){
     int i = 0;
     if (number[0] == '-') i = 1;
@@ -17,7 +17,7 @@ bool isNumber(char number[]){
     }
     return true;
 }
-*/
+
 
 bool comprobacion(char* linea_leida, char* buscada){
     char** contenido = split(linea_leida, ' ');
@@ -115,7 +115,7 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
 }
 
 
-/*
+
 int main(int argc, char* argv[]){
     if (argc < 3) {
         fprintf(stderr, "%s\n","Cantidad erronea de parametros");
@@ -146,4 +146,3 @@ int main(int argc, char* argv[]){
         return 0;
     }
 }
-*/

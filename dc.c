@@ -308,9 +308,8 @@ int calculadora_entrada(void){
     return 0;
 }
 
-/*
+
 int main(void){
     calculadora_entrada();
     return 0;
 }
-*/
