@@ -259,23 +259,25 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
     char** entrada = split(linea,' ');
     bool error_stop = false;
     for(int i = 0; entrada[i] != NULL; i++){
-        if(isNumber(entrada[i])){
-            guarda_numeros[j] = atoi(entrada[i]);
-            pila_apilar(pila,&guarda_numeros[j]);
-            j++;
-        }else{
-            if(ops(pila,entrada[i],operadores,guarda_numeros,j) == false){
-                error_stop = true;
-                break;
+        if (strcmp(entrada[i],"\0") != 0){
+            if(isNumber(entrada[i])){
+                guarda_numeros[j] = atoi(entrada[i]);
+                pila_apilar(pila,&guarda_numeros[j]);
+                j++;
+            }else{
+                if(ops(pila,entrada[i],operadores,guarda_numeros,j) == false){
+                    error_stop = true;
+                    break;
+                }
+                j++;
             }
-            j++;
-        }
-        if(j == tam){
-            if(redimensionar_arr(guarda_numeros,tam) == false){
-                error_stop = true;
-                break;
+            if(j == tam){
+                if(redimensionar_arr(guarda_numeros,tam) == false){
+                    error_stop = true;
+                    break;
+                }
+                tam = tam*FACTOR_REDIMENSION;
             }
-            tam = tam*FACTOR_REDIMENSION;
         }
     }
     if(pila_cantidad(pila) != 1){
