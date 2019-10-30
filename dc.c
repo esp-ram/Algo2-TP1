@@ -25,7 +25,7 @@ bool isNumber(char number[]){
     if (number[0] == '-' && number[1] == '\0'){
         return false;
     }
-    i++;
+    i = 1;
     for (; number[i] != 0; i++){
         if (!isdigit(number[i])) return false;
     }
@@ -40,10 +40,8 @@ int suma (pila_t* pila, int* arreglo,size_t j){
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    printf("saco numeros a = %d, b = %d\n",a,b);
     arreglo[j] = a + b;
     pila_apilar(pila,&arreglo[j]);
-    printf("%d\n",arreglo[j]);
     return 0;
 }
 
@@ -55,10 +53,8 @@ int resta (pila_t* pila, int* arreglo,size_t j){
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
-    printf("saco numeros a = %d, b = %d\n",a,b);
     arreglo[j] = a - b;
     pila_apilar(pila,&arreglo[j]);
-    printf("%d\n",arreglo[j]);
     return 0;
 }
 

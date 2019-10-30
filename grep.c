@@ -54,7 +54,7 @@ void mostrar_anteriores(lista_t* lista){
 void desde_entrada(char* palabra, size_t n){
     lista_t* lista_lineas = lista_crear();
     if(n != 0){
-        lista_destruir(lista_lineas);
+        lista_destruir(lista_lineas,NULL);
     }
     char *line_buffer = NULL;
     size_t line_buffer_size = 0;
@@ -85,7 +85,7 @@ void desde_entrada(char* palabra, size_t n){
 void desde_archivo(char* palabra, size_t n, char* archivo){
     lista_t* lista_lineas = lista_crear();
     if(n != 0){
-        lista_destruir(lista_lineas);
+        lista_destruir(lista_lineas,NULL);
     }
     char *line_buffer = NULL;
     size_t line_buffer_size = 0;
