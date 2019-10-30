@@ -22,7 +22,10 @@ bool redimensionar_arr(int* vector, size_t tam_nuevo) {
 
 bool isNumber(char number[]){
     int i = 0;
-    if (number[0] == '-') i = 1;
+    if (number[0] == '-' && number[1] == '\0'){
+        return false;
+    }
+    i++;
     for (; number[i] != 0; i++){
         if (!isdigit(number[i])) return false;
     }
@@ -32,35 +35,36 @@ bool isNumber(char number[]){
 
 int suma (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
+    printf("saco numeros a = %d, b = %d\n",a,b);
     arreglo[j] = a + b;
     pila_apilar(pila,&arreglo[j]);
+    printf("%d\n",arreglo[j]);
     return 0;
 }
 
 
 int resta (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
     a = *(int*)pila_desapilar(pila);
     b = *(int*)pila_desapilar(pila);
+    printf("saco numeros a = %d, b = %d\n",a,b);
     arreglo[j] = a - b;
     pila_apilar(pila,&arreglo[j]);
+    printf("%d\n",arreglo[j]);
     return 0;
 }
 
 
 int multiplicacion (pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -74,7 +78,6 @@ int multiplicacion (pila_t* pila, int* arreglo,size_t j){
 
 int division(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -105,7 +108,6 @@ int calculo_potencia(int a, int b){
 
 int potencia(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -137,7 +139,6 @@ int calculo_raiz(int a, int min, int max){
 
 int raiz(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 1){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a;
@@ -161,7 +162,6 @@ int calculo_logartimo(int a, int b){
 
 int logaritmo(pila_t* pila, int* arreglo,size_t j){
     if(pila_cantidad(pila) < 2){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b;
@@ -178,7 +178,6 @@ int logaritmo(pila_t* pila, int* arreglo,size_t j){
 
 int ternario(pila_t* pila, int* arreglo, size_t j){
     if(pila_cantidad(pila) < 3){
-        fprintf(stdout, "ERROR\n");
         return -1;
     }
     int a ,b, c;
@@ -196,42 +195,43 @@ int ternario(pila_t* pila, int* arreglo, size_t j){
 
 
 bool ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
-    if(strstr(signo,operadores[0]) != NULL){
+    size_t longitud = strlen(signo)-1;
+    if(strncmp(operadores[0],signo,longitud) == 0){
         if (suma(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[1]) != NULL){
+    }else if(strncmp(operadores[1],signo,longitud) == 0){
         if (resta(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[2]) != NULL){
+    }else if(strncmp(operadores[2],signo,longitud) == 0){
         if(multiplicacion(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[3]) != NULL){
+    }else if(strncmp(operadores[3],signo,longitud) == 0){
         if(division(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[4]) != NULL){
+    }else if(longitud == 4 && strncmp(operadores[4],signo,longitud) == 0){
         if (raiz(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[5]) != NULL){
+    }else if(strncmp(operadores[5],signo,longitud) == 0){
         if (potencia(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[6]) != NULL){
+    }else if(strncmp(operadores[6],signo,longitud) == 0){
         if (ternario(pila,arreglo,j) == -1){
             return false;
         }
         return true;
-    }else if(strstr(signo,operadores[7]) != NULL){
+    }else if(longitud == 3 && strncmp(operadores[7],signo,longitud) == 0){
         if (logaritmo(pila,arreglo,j) == -1){
             return false;
         }
@@ -284,7 +284,7 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
         error_stop = true;
     }
     if(!error_stop){
-        printf("%d\n",*(int*)pila_desapilar(pila));
+        fprintf(stdout,"%d\n",*(int*)pila_desapilar(pila));
     }
     pila_destruir(pila);
     free(guarda_numeros);
