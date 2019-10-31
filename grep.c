@@ -118,10 +118,9 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
 
 int main(int argc, char* argv[]){
     if (argc < 3) {
-        fprintf(stderr, "%s\n","Cantidad erronea de parametros");
+        fprintf(stderr, "%s\n","Cantidad de parametros erronea");
         return 0;
     } else if (argc == 3) {
-        printf("caso == 3\n");
         if(!isNumber(argv[2]) || atoi(argv[2]) < 0){
             fprintf(stderr,"%s\n","no es un numero");
             return 0;
@@ -129,7 +128,6 @@ int main(int argc, char* argv[]){
         desde_entrada(argv[1],atoi(argv[2]));
         return 0;
     }else if (argc == 4){
-        printf("caso == 4\n");
         printf("%d\n",atoi(argv[2]));
         if(!isNumber(argv[2])){
             fprintf(stderr,"%s\n","no es un numero");
@@ -142,7 +140,7 @@ int main(int argc, char* argv[]){
         desde_archivo(argv[1],atoi(argv[2]),argv[3]);
         return 0;
     }else{
-        fprintf(stderr, "%s\n","Cantidad erronea de parametros");
+        fprintf(stderr, "%s\n","Cantidad de parametros erronea");
         return 0;
     }
 }
