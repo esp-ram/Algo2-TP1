@@ -64,12 +64,13 @@ void desde_entrada(char* palabra, size_t n){
         if(n != 0){
             agregar_linea(line_buffer,lista_lineas,n);
             if(comprobacion(line_buffer, palabra)){
-                fprintf(stdout, "\ncoincidencia encontrada\n");
+                //fprintf(stdout, "\ncoincidencia encontrada\n");
                 mostrar_anteriores(lista_lineas);
             }
         }else{
             if(comprobacion(line_buffer, palabra)){
-                fprintf(stdout, "\ncoincidencia encontrada: %s\n", line_buffer);
+                //fprintf(stdout, "\ncoincidencia encontrada\n");
+                fprintf(stdout, "%s\n", line_buffer);
             }
         }
         line_size = getline(&line_buffer, &line_buffer_size, stdin);
@@ -96,7 +97,7 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
         if(n != 0){
             agregar_linea(line_buffer,lista_lineas,n);
             if(comprobacion(line_buffer, palabra)){
-                fprintf(stdout, "\ncoincidencia encontrada\n");
+                //fprintf(stdout, "\ncoincidencia encontrada\n");
                 mostrar_anteriores(lista_lineas);
             }
         }else{
@@ -122,15 +123,17 @@ int main(int argc, char* argv[]){
         return 0;
     } else if (argc == 3) {
         if(!isNumber(argv[2]) || atoi(argv[2]) < 0){
-            fprintf(stderr,"%s\n","no es un numero");
+            fprintf(stderr, "%s\n","Cantidad de parametros erronea");
+            //fprintf(stderr,"%s\n","no es un numero");
             return 0;
         }
         desde_entrada(argv[1],atoi(argv[2]));
         return 0;
     }else if (argc == 4){
-        printf("%d\n",atoi(argv[2]));
+        //printf("%d\n",atoi(argv[2]));
         if(!isNumber(argv[2])){
-            fprintf(stderr,"%s\n","no es un numero");
+            fprintf(stderr, "%s\n","Cantidad de parametros erronea");
+            //fprintf(stderr,"%s\n","no es un numero");
             return 0;
         }
         if(access(argv[3], R_OK ) == -1 ) {

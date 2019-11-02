@@ -20,7 +20,7 @@ bool redimensionar_arr(int* vector, size_t tam_nuevo) {
 }
 
 
-bool isNumber(char number[]){
+bool isNumberC(char number[]){
     int i = 0;
     if (number[0] == '-'){
         if (number[1] == '\0'){
@@ -268,7 +268,7 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
         if (strcmp(entrada[i],"\0") != 0){
             //printf("longitud de entrada: %ld\n",strlen(entrada[i]));
             //printf("entrada %d: %s\n",i,entrada[i]);
-            if(isNumber(entrada[i])){
+            if(isNumberC(entrada[i])){
                 //printf("es un numero, apilo: %d\n",atoi(entrada[i]));
                 guarda_numeros[j] = atoi(entrada[i]);
                 pila_apilar(pila,&guarda_numeros[j]);
@@ -301,7 +301,7 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
     pila_destruir(pila);
     free(guarda_numeros);
     free_strv(entrada);
-    free_strv(prueba_linea);
+    free(prueba_linea);
     return error_stop;
 }
 
