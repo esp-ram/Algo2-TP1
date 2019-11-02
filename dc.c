@@ -114,9 +114,7 @@ int potencia(pila_t* pila, int* arreglo,size_t j){
     if(b < 0){
         return -1;
     }
-    //printf("desapilo a: %d desapilo b: %d\n",a,b);
     arreglo[j] = calculo_potencia(a,b);
-    //printf("resultado: %d\n",arreglo[j]);
     pila_apilar(pila,&arreglo[j]);
     return 0;
 }
@@ -196,8 +194,6 @@ int ternario(pila_t* pila, int* arreglo, size_t j){
 
 bool ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
     size_t longitud = ((strlen(signo)));
-    //printf("entra operacion\n");
-    //printf("longitud: %ld\n",longitud);
     if(strncmp(operadores[0],signo,longitud) == 0){
         if (suma(pila,arreglo,j) == -1){
             return false;
@@ -224,7 +220,6 @@ bool ops (pila_t* pila, char* signo, char** operadores, int* arreglo, size_t j){
         }
         return true;
     }else if(strncmp(operadores[5],signo,longitud) == 0){
-        //printf("es potencia\n");
         if (potencia(pila,arreglo,j) == -1){
             return false;
         }
@@ -257,8 +252,6 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
         return false;
     }
     char* prueba_linea = substr(linea,strlen(linea)-1);
-    //printf("%ld\n", strlen(linea));
-    //printf("%ld\n", strlen(prueba_linea));
 
     size_t tam = long_linea;
     int j = 0;
@@ -266,16 +259,11 @@ bool calculadora_l(char** operadores, char* linea, size_t long_linea){
     bool error_stop = false;
     for(int i = 0; entrada[i] != NULL; i++){
         if (strcmp(entrada[i],"\0") != 0){
-            //printf("longitud de entrada: %ld\n",strlen(entrada[i]));
-            //printf("entrada %d: %s\n",i,entrada[i]);
             if(isNumberC(entrada[i])){
-                //printf("es un numero, apilo: %d\n",atoi(entrada[i]));
                 guarda_numeros[j] = atoi(entrada[i]);
                 pila_apilar(pila,&guarda_numeros[j]);
                 j++;
             }else{
-                //printf("es un operador: %s\n",entrada[i]);
-
                 if(ops(pila,entrada[i],operadores,guarda_numeros,j) == false){
                     error_stop = true;
                     break;
