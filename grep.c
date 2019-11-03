@@ -21,8 +21,11 @@ bool isNumber(char number[]){
 
 bool comprobacion(char* linea_leida, char* buscada){
     char** contenido = split(linea_leida, ' ');
+    if (contenido == NULL){
+        return false;
+    }
     for(size_t i = 0; contenido[i] != NULL; i++){
-        if (contenido[i] != NULL && strlen(contenido[i]) >= strlen(buscada) && strstr(contenido[i], buscada) != NULL){
+        if (strlen(contenido[i]) >= strlen(buscada) && strstr(contenido[i], buscada) != NULL){
             free_strv(contenido);
             return true;
         }
@@ -35,6 +38,9 @@ bool comprobacion(char* linea_leida, char* buscada){
 void agregar_linea(char* linea, lista_t* lista, size_t n){
     char* add_line;
     add_line = malloc(sizeof(char) * strlen(linea)+1);
+    if(add_line == NULL){
+        return NULL;
+    }
     strcpy(add_line,linea);
     lista_insertar_ultimo(lista,add_line);
     if(lista_largo(lista) > (size_t)(n+1)){
@@ -64,12 +70,10 @@ void desde_entrada(char* palabra, size_t n){
         if(n != 0){
             agregar_linea(line_buffer,lista_lineas,n);
             if(comprobacion(line_buffer, palabra)){
-                //fprintf(stdout, "\ncoincidencia encontrada\n");
                 mostrar_anteriores(lista_lineas);
             }
         }else{
             if(comprobacion(line_buffer, palabra)){
-                //fprintf(stdout, "\ncoincidencia encontrada\n");
                 fprintf(stdout, "%s\n", line_buffer);
             }
         }
@@ -97,7 +101,6 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
         if(n != 0){
             agregar_linea(line_buffer,lista_lineas,n);
             if(comprobacion(line_buffer, palabra)){
-                //fprintf(stdout, "\ncoincidencia encontrada\n");
                 mostrar_anteriores(lista_lineas);
             }
         }else{
@@ -124,16 +127,13 @@ int main(int argc, char* argv[]){
     } else if (argc == 3) {
         if(!isNumber(argv[2]) || atoi(argv[2]) < 0){
             fprintf(stderr, "%s\n","Cantidad de parametros erronea");
-            //fprintf(stderr,"%s\n","no es un numero");
             return 0;
         }
         desde_entrada(argv[1],atoi(argv[2]));
         return 0;
     }else if (argc == 4){
-        //printf("%d\n",atoi(argv[2]));
         if(!isNumber(argv[2])){
             fprintf(stderr, "%s\n","Cantidad de parametros erronea");
-            //fprintf(stderr,"%s\n","no es un numero");
             return 0;
         }
         if(access(argv[3], R_OK ) == -1 ) {
