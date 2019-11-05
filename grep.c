@@ -41,7 +41,7 @@ void agregar_linea(char* linea, lista_t* lista, size_t n){
     if(add_line == NULL){
         return;
     }
-    strncpy(add_line,linea,strlen(linea)-1);
+    strcpy(add_line,linea,strlen(linea));
     lista_insertar_ultimo(lista,add_line);
     if(lista_largo(lista) > (size_t)(n+1)){
         free(lista_borrar_primero(lista));
@@ -51,7 +51,7 @@ void agregar_linea(char* linea, lista_t* lista, size_t n){
 void mostrar_anteriores(lista_t* lista){
     while(!lista_esta_vacia(lista)){
         void* linea_print = lista_borrar_primero(lista);
-        fprintf(stdout, "%s\n", (char*)linea_print);
+        fprintf(stdout, "%s", (char*)linea_print);
         free(linea_print);
     }
 }
