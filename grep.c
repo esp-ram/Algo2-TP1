@@ -37,11 +37,11 @@ bool comprobacion(char* linea_leida, char* buscada){
 
 void agregar_linea(char* linea, lista_t* lista, size_t n){
     char* add_line;
-    add_line = malloc(sizeof(char) * strlen(linea)+1);
+    add_line = calloc(strlen(linea)+1,sizeof(char));
     if(add_line == NULL){
-        return NULL;
+        return;
     }
-    strcpy(add_line,linea);
+    strncpy(add_line,linea,strlen(linea)-1);
     lista_insertar_ultimo(lista,add_line);
     if(lista_largo(lista) > (size_t)(n+1)){
         free(lista_borrar_primero(lista));
@@ -51,7 +51,7 @@ void agregar_linea(char* linea, lista_t* lista, size_t n){
 void mostrar_anteriores(lista_t* lista){
     while(!lista_esta_vacia(lista)){
         void* linea_print = lista_borrar_primero(lista);
-        fprintf(stdout, "%s", (char*)linea_print);
+        fprintf(stdout, "%s\n", (char*)linea_print);
         free(linea_print);
     }
 }
@@ -59,7 +59,7 @@ void mostrar_anteriores(lista_t* lista){
 
 void desde_entrada(char* palabra, size_t n){
     lista_t* lista_lineas = lista_crear();
-    if(n != 0){
+    if(n == 0){
         lista_destruir(lista_lineas,NULL);
     }
     char *line_buffer = NULL;
@@ -89,7 +89,7 @@ void desde_entrada(char* palabra, size_t n){
 
 void desde_archivo(char* palabra, size_t n, char* archivo){
     lista_t* lista_lineas = lista_crear();
-    if(n != 0){
+    if(n == 0){
         lista_destruir(lista_lineas,NULL);
     }
     char *line_buffer = NULL;
