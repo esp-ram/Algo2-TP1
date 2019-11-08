@@ -20,17 +20,9 @@ bool isNumber(char number[]){
 
 
 bool comprobacion(char* linea_leida, char* buscada){
-    char** contenido = split(linea_leida, ' ');
-    if (contenido == NULL){
-        return false;
+    if(strstr(linea_leida, buscada) != NULL){
+        return true;
     }
-    for(size_t i = 0; contenido[i] != NULL; i++){
-        if (strlen(contenido[i]) >= strlen(buscada) && strstr(contenido[i], buscada) != NULL){
-            free_strv(contenido);
-            return true;
-        }
-    }
-    free_strv(contenido);
     return false;
 }
 
@@ -41,7 +33,7 @@ void agregar_linea(char* linea, lista_t* lista, size_t n){
     if(add_line == NULL){
         return;
     }
-    strcpy(add_line,linea,strlen(linea));
+    strcpy(add_line,linea);
     lista_insertar_ultimo(lista,add_line);
     if(lista_largo(lista) > (size_t)(n+1)){
         free(lista_borrar_primero(lista));
@@ -74,7 +66,7 @@ void desde_entrada(char* palabra, size_t n){
             }
         }else{
             if(comprobacion(line_buffer, palabra)){
-                fprintf(stdout, "%s\n", line_buffer);
+                fprintf(stdout, "%s", line_buffer);
             }
         }
         line_size = getline(&line_buffer, &line_buffer_size, stdin);
@@ -105,7 +97,7 @@ void desde_archivo(char* palabra, size_t n, char* archivo){
             }
         }else{
             if(comprobacion(line_buffer, palabra)){
-                fprintf(stdout, "%s\n", line_buffer);
+                fprintf(stdout, "%s", line_buffer);
             }
         }
         line_size = getline(&line_buffer, &line_buffer_size, fp);
